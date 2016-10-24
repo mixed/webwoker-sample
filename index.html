@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0">
+		<title>luminosityGrey Demo</title>
+		<style type="text/css" media="screen">
+			.imageHolder { border: solid 1px #000; }
+		</style>
+
+
+	</head>
+
+	<body>
+		<canvas id="master" class="imageHolder" width="800" height="216"></canvas>
+		<canvas id="scratch" class="imageHolder" width="800" height="216"></canvas>
+
+		<div>
+		<button type="button" onclick="javascript:luminosityGrey();">
+			luminosityGrey
+		</button>
+		
+		</div>
+		<script type="text/javascript">
+			// canvas width, height
+			var width = 800, heigit = 216;
+			// master canvas context
+			var masterContext = document.getElementById('master').getContext('2d');
+			// It draw original image on canvas
+			function drawImage() {
+				var w3c = new Image();
+				w3c.src = 'W3C-Developers-Dark.png';
+				w3c.onload = function() {
+					masterContext.drawImage(w3c, 0, 0, width, heigit);
+				};
+			}
+			drawImage();
+
+			// Canvas image data send webworker.
+			function luminosityGrey() {
+				var data = masterContext.getImageData(0, 0, width, heigit);
+				worker.postMessage(data);
+			}
+
+			var worker = new Worker('worker.js');
+			// Webworker received message.
+			worker.onmessage = function (event) {
+				var data = event.data;
+				var scratchContext = document.getElementById('scratch').getContext('2d');
+				// draw filtered image.
+				scratchContext.putImageData(data, 0, 0, 0, 0, width, heigit);
+			};
+		</script>
+	</body>
+
+</html>
