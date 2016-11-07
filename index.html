@@ -12,6 +12,7 @@
 		<script type="text/javascript">
 			// create WebWorker
 			var worker = new Worker("worker.js");
+			
 			var width = 800, height = 216;
 			var masterContext = document.getElementById("master").getContext("2d");
 			var scratchContext = document.getElementById("scratch").getContext("2d");
