@@ -5,12 +5,11 @@
 		<meta charset="UTF-8">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
-		<title>luminosityGrey Demo</title>
+		<title>GrayScale Demo</title>
 		<style type="text/css" media="screen">
 			.imageHolder { border: solid 1px #000; }
 		</style>
-
-
+		<script type="text/javascript" src="w3c-image-datauri.js"></script>
 	</head>
 
 	<body>
@@ -18,33 +17,31 @@
 		<canvas id="scratch" class="imageHolder" width="800" height="216"></canvas>
 
 		<div>
-		<button type="button" onclick="javascript:luminosityGrey();">
-			luminosityGrey
+		<button type="button" onclick="javascript:grayScale();">
+			grayScale
 		</button>
 		
 		</div>
 		<script type="text/javascript">
+			var worker = new Worker('worker.js');
 			// canvas width, height
 			var width = 800, heigit = 216;
 			// master canvas context
 			var masterContext = document.getElementById('master').getContext('2d');
-			// It draw original image on canvas
-			function drawImage() {
-				var w3c = new Image();
-				w3c.src = 'W3C-Developers-Dark.png';
-				w3c.onload = function() {
-					masterContext.drawImage(w3c, 0, 0, width, heigit);
-				};
-			}
-			drawImage();
 
+			// It draw original image on canvas
+			var w3c = new Image();
+			w3c.src = w3cDataUri;
+			w3c.onload = function() {
+				masterContext.drawImage(w3c, 0, 0, width, heigit);
+			};
+			
 			// Canvas image data send webworker.
-			function luminosityGrey() {
+			function grayScale() {
 				var data = masterContext.getImageData(0, 0, width, heigit);
 				worker.postMessage(data);
 			}
-
-			var worker = new Worker('worker.js');
+			
 			// Webworker received message.
 			worker.onmessage = function (event) {
 				var data = event.data;
