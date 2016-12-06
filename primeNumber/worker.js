@@ -21,7 +21,7 @@ function sieveOfEratosthenes (n){
     }
 
     for (var i = 2; i < n; i++) {
-        // add none multiple
+        // find prime numbers
         if (array[i]) {
             primeNumbers.push(i);
         }
