@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<title>Get Prime Numbers Demo</title>
+	</head>
+	<body>
+		<input type="text" name="number" id="number">
+		<button type="button" onclick="javascript:getPrimeNumbers();">getPrimeNumbers</button>
+		<textarea id="primeNumbers" style="display: block;" rows="30" cols="40"></textarea>
+
+		<script type="text/javascript">
+			// create WebWorker
+			var worker = new Worker("worker.js");
+			var button = document.querySelector("button");
+			
+			function getPrimeNumbers() {
+				// disabled button
+				button.setAttribute("disabled","disabled");
+				button.innerText = "Processing";
+
+			    var number = document.getElementById("number").value;
+			    // send message to WebWorker
+			    worker.postMessage(number);
+			}
+
+			// WebWorker received message.
+			worker.onmessage = function(event) {
+			    var data = event.data;
+			    document.getElementById("primeNumbers").value = JSON.stringify(data, null, 2);
+
+			    // disabled button
+			    button.removeAttribute("disabled");
+				button.innerText = "getPrimeNumbers";
+			    
+			};
+		</script>
+	</body>
+
+</html>
