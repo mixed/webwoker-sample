@@ -5,7 +5,7 @@
 		<title>Get Prime Numbers Demo</title>
 	</head>
 	<body>
-		<input type="text" name="number" id="number">
+		<input type="text" name="number" id="number" placeholder="Maximum 300,000">
 		<button type="button" onclick="javascript:getPrimeNumbers();">getPrimeNumbers</button>
 		<textarea id="primeNumbers" style="display: block;" rows="30" cols="40"></textarea>
 
@@ -15,11 +15,16 @@
 			var button = document.querySelector("button");
 			
 			function getPrimeNumbers() {
+				var maximumNumber = 30000;
 				// disabled button
 				button.setAttribute("disabled","disabled");
 				button.innerText = "Processing";
 
 			    var number = document.getElementById("number").value;
+			    if ( parseInt(number, 10) > maximumNumber ){
+			    	number = maximumNumber;
+			    	document.getElementById("number").value = number;
+			    }
 			    // send message to WebWorker
 			    worker.postMessage(number);
 			}
